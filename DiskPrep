@@ -1,0 +1,98 @@
+#!/bin/bash 
+
+function myEval { 
+    #TODO - look into not using eval
+    #TODO - pull this out into a shared resource
+    #https://stackoverflow.com/questions/17529220/why-should-eval-be-avoided-in-bash-and-what-should-i-use-instead 
+    red=`tput setaf 1`
+    green=`tput setaf 2`
+    reset=`tput sgr0`
+
+    printf "Running eval: %s\n" "${1}"
+    eval ${1}
+
+    if [[ $? != 0 ]]; then
+        printf "Command %sfailed%s!!\nExiting script...\n\n" "${red}" "${reset}"
+        exit 1
+    else
+        printf "Command completed %ssuccessfully%s\n\n"   "${green}" "${reset}"
+    fi
+}
+
+blacklist="/dev/sda,/dev/sdz"       # A comma separated list of block block devices to black list
+block_device=""                     # The block device to use
+
+#Verify root privilege
+if [[ "$EUID" > 0 ]];then 
+    printf "Please run as root\n"
+    exit 1
+fi
+
+printf "This script assumes the disk has already been wiped!!\nIt will setup the disk with Simple partition layout with LUKS (no LVM)\n\n"
+
+#TODO turn parameters into command line arguments
+
+#Verify boot mode
+read -p "Is this meant for a UEFI boot mode? " -n 1 -r UEFI_BIOS_REPLY
+printf "\n"
+if [[ ! "${UEFI_BIOS_REPLY}" =~ [Nn] ]];then
+    printf "UEFI not currently supported"
+    exit 1
+fi 
+printf "Continuing with BIOS boot mode setup...\n"
+
+#Determine block device to use
+read -p "Enter the block device you want to partition and format: " -r block_device
+printf "\n"
+if [[ "${blacklist}" =~ .*"${block_device}".* ]];then
+    printf "Block device %s is black listed\nExiting script\n\n" "${block_device}"
+    exit 1
+fi 
+
+if [[ ! -b "${block_device}" ]];then
+    printf "Block device does not exist\nExiting script\n\n"
+    exit 1
+fi
+
+#Wipe MBR
+printf "Verify the MBR is wiped\n"
+myEval "sudo dd if=/dev/urandom of=$block_device count=50000 status=progress"
+myEval "sync"
+
+#TODO should I use the alignment flag in the Parted command for anything?
+#MBR
+myEval "parted --script ${block_device} mklabel msdos"
+#/boot
+myEval "parted --script ${block_device} mkpart primary ext4 1MiB 2GiB set 1 boot on"
+#/
+myEval "parted --script ${block_device} mkpart primary ext4 2GiB 100%"
+
+myEval "sync"
+
+#TODO look into the details of all the different options for these tools
+#sudo cryptsetup -q -v luksFormat /dev/sdb2
+#sudo cryptsetup open /dev/sdb2 cryptroot
+#sudo cryptsetup close cryptroot 
+myEval "cryptsetup -q -v luksFormat ${block_device}2"
+myEval "cryptsetup open ${block_device}2 cryptroot"
+
+#Format /
+myEval "mkfs.ext4 /dev/mapper/cryptroot"
+
+#Verify things worked by opening and closing it
+myEval "cryptsetup close cryptroot"
+myEval "cryptsetup open ${block_device}2 cryptroot"
+myEval "mount /dev/mapper/cryptroot /mnt"
+myEval "umount /mnt"
+myEval "cryptsetup close cryptroot"
+
+#Format /boot 
+myEval "mkfs.ext4 ${block_device}1"
+myEval "mkdir -p /mnt/bootTemp"
+myEval "mount ${block_device}1 /mnt/bootTemp"
+myEval "umount /mnt/bootTemp"
+myEval "rmdir /mnt/bootTemp"
+
+printf "\n\n\n"
+
+#End of script

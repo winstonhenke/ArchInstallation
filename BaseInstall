@@ -1,0 +1,64 @@
+#!/bin/bash 
+ 
+ function myEval { 
+    #TODO - look into not using eval
+    #TODO - pull this out into a shared resource
+    #https://stackoverflow.com/questions/17529220/why-should-eval-be-avoided-in-bash-and-what-should-i-use-instead 
+    red=`tput setaf 1`
+    green=`tput setaf 2`
+    reset=`tput sgr0`
+
+    printf "Running eval: %s\n" "${1}"
+    eval ${1}
+
+    if [[ $? != 0 ]]; then
+        printf "Command %sfailed%s!!\nExiting script...\n\n" "${red}" "${reset}"
+        exit 1
+    else
+        printf "Command completed %ssuccessfully%s\n\n"   "${green}" "${reset}"
+    fi
+}
+
+block_device="/dev/sdb"             #TODO make configurable
+
+#TODO Verify the boot mode
+#To verify this, list the efivars directory
+#ls /sys/firmware/efi/efivars
+#If the directory does not exist, the system may be booted in BIOS or CSM mode. 
+
+#Verify root privilege
+if [[ "$EUID" > 0 ]];then 
+    printf "Please run as root\n"
+    exit 1
+fi
+
+#Verify internet connection
+myEval "wget -q --tries=10 --timeout=20 --spider http://google.com"
+
+#Mount root
+myEval "cryptsetup open ${block_device}2 cryptroot"
+myEval "mount /dev/mapper/cryptroot /mnt"
+
+#Mount boot
+myEval "mkdir -p /mnt/boot"
+myEval "mount ${block_device}1 /mnt/boot"
+
+#TODO update and verify /etc/pacman.d/mirrorlist
+
+#Install the base packages
+myEval "pacstrap /mnt base base-devel"
+
+#Generate an fstab file
+myEval "genfstab -U /mnt >> /mnt/etc/fstab"
+
+
+
+#Unmount boot
+myEval "umount /mnt/boot"
+myEval "rmdir /mnt/boot"
+
+#Unmount root
+myEval "umount /mnt"
+myEval "cryptsetup close cryptroot"
+
+#End of script
