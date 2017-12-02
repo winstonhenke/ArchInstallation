@@ -37,19 +37,18 @@ sed -i '/GRUB_CMDLINE_LINUX/c\GRUB_CMDLINE_LINUX="cryptdevice=UUID=${fs_uuid}:cr
 myEval "grub-mkconfig -o /boot/grub/grub.cfg"
 
 # run these following essential service by default
-systemctl enable dhcpcd.service
-systemctl enable ntpd.service
+myEval "systemctl enable dhcpcd.service"
 echo "$HOST" > /etc/hostname
 
 # adding your normal user with additional wheel group so can sudo
 myEval "useradd -m -G wheel -p test -s /bin/bash testuser"
 
 # adjust your timezone here
-hwclock --systohc
+myEval "hwclock --systohc"
 
-echo en_US.UTF-8 UTF-8 > /etc/locale.gen
-echo LANG=en_US.UTF-8 > /etc/locale.conf
-locale-gen
+myEval "echo en_US.UTF-8 UTF-8 > /etc/locale.gen"
+myEval "echo LANG=en_US.UTF-8 > /etc/locale.conf"
+myEval "locale-gen"
 
 # because we are using ssh keys, make sudo not ask for passwords
 echo 'root ALL=(ALL) ALL' > /etc/sudoers
@@ -58,7 +57,7 @@ echo '%wheel ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
 
 #Do Initramfs stuff here
 sed -i 's/^HOOKS.*/HOOKS="base udev autodetect modconf keyboard block encrypt lvm2 filesystems keyboard fsck"/' /etc/mkinitcpio.conf
-mkinitcpio -p linux
+myEval "mkinitcpio -p linux"
 
 printf "setting password for root... \n"
 passwd
