@@ -57,7 +57,7 @@ echo '%wheel ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
 
 
 #Do Initramfs stuff here
-sed -i 's/^HOOKS.*/HOOKS=(base udev autodetect modconf keyboard block sd-encrypt filesystems keyboard fsck)/' /etc/mkinitcpio.conf
+sed -i 's/^HOOKS.*/HOOKS=(base systemd autodetect keyboard modconf block sd-encrypt filesystems fsck)/' /etc/mkinitcpio.conf
 myEval "grep HOOKS /etc/mkinitcpio.conf"
 myEval "mkinitcpio -p linux"
 
