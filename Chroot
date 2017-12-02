@@ -1,5 +1,7 @@
 #!/bin/bash
 
+block_device="${1}"
+
  function myEval { 
     #TODO - look into not using eval
     #TODO - pull this out into a shared resource
@@ -19,50 +21,29 @@
     fi
 }
 
+# Install grub as the bootloader
+myEval "grub-install --target=i386-pc --recheck ${block_device}"
 
-HOST=myhostname
-USERNAME=testuser
-HOME_DIR="/home/${USERNAME}"
-SWAP_SIZE=4G
-echo DISK="$1", HOST="$HOST", USERNAME="$USERNAME", HOME_DIR="$HOME_DIR"
+#Get root partition UUID (Do NOT use the UUID of the unlocked luks device)
+block_device_uuid=$(blkid ${block_device}2 | sed -n 's/.* UUID=\"\([^\"]*\)\".*/\1/p')
 
-# grub as a bootloader
-grub-install --target=i386-pc --recheck /dev/sdb
-# This makes the grub timeout 0, it's faster than 5 :)
-#sudo sed -i 's/GRUB_TIMEOUT=5/GRUB_TIMEOUT=0/g' /etc/default/grub
-#Get root partition uuid
-#Make sure you're using the UUID of /dev/sda2 in your grub config - not the UUID of the unlocked luks device
-fs_uuid=$(blkid /dev/sdb2 | sed -n 's/.* UUID=\"\([^\"]*\)\".*/\1/p')
-printf "UUID for /dev/mapper/cryptroot is: %s   \n" "${fs_uuid}"
-#sed -i "/GRUB_CMDLINE_LINUX=/c\\GRUB_CMDLINE_LINUX=\"cryptdevice=UUID=${fs_uuid}:cryptroot root=/dev/mapper/cryptroot\"" /etc/default/grub
-sed -i "/GRUB_CMDLINE_LINUX=/c\\GRUB_CMDLINE_LINUX=\"rd.luks.uuid=${fs_uuid} rd.luks.name=${fs_uuid}=cryptroot root=/dev/mapper/cryptroot rd.luks.crypttab=no\"" /etc/default/grub
-myEval "grep GRUB_CMDLINE_LINUX /etc/default/grub"
+#Set kernel parameters for unlocking encrypted root partition
+sed -i "/GRUB_CMDLINE_LINUX=/c\\GRUB_CMDLINE_LINUX=\"rd.luks.uuid=${block_device_uuid} rd.luks.name=${block_device_uuid}=cryptroot root=/dev/mapper/cryptroot rd.luks.crypttab=no\"" /etc/default/grub
+
+#Re-generate the grub.cfg file
 myEval "grub-mkconfig -o /boot/grub/grub.cfg"
-
-# run these following essential service by default
-#myEval "systemctl enable dhcpcd.service"
-#echo "$HOST" > /etc/hostname
-
-# adding your normal user with additional wheel group so can sudo
-myEval "useradd -m -G wheel -p test -s /bin/bash testuser"
-
-# adjust your timezone here
-myEval "hwclock --systohc"
 
 myEval "echo en_US.UTF-8 UTF-8 > /etc/locale.gen"
 myEval "echo LANG=en_US.UTF-8 > /etc/locale.conf"
 myEval "locale-gen"
 
-# because we are using ssh keys, make sudo not ask for passwords
-echo 'root ALL=(ALL) ALL' > /etc/sudoers
-echo '%wheel ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
-
-
-#Do Initramfs stuff here
+#Specify hooks
 sed -i 's/^HOOKS.*/HOOKS=(base systemd autodetect keyboard modconf block sd-encrypt filesystems fsck)/' /etc/mkinitcpio.conf
-myEval "grep HOOKS /etc/mkinitcpio.conf"
+#Create a new initramfs
 myEval "mkinitcpio -p linux"
 
-printf "setting password for root... \n"
+printf "Setting password for root... \n"
 myEval "passwd"
+
+printf "BaseInstall finished...\n\n\n"
 myEval "exit"

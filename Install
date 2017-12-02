@@ -1,0 +1,34 @@
+#!/bin/bash
+
+block_device=""                     # The block device to use
+
+#Verify root privilege
+if [[ "$EUID" > 0 ]];then 
+    printf "Requires root privileges. Please run under the root user\n"
+    exit 1
+fi
+
+#TODO - Verify BIOS boot mode
+
+#Verify disk has been wiped
+printf "This script assumes the disk has already been wiped!!\n"
+read -p "Do you want to proceed?" -n 1 -r verify_disk_wiped
+printf "\n"
+if [[ ! "${verify_disk_wiped}" =~ [Yy] ]];then
+    printf "Wipe the disk and try again\n\n"
+    exit 1
+fi 
+
+#Determine block device to use
+read -p "Enter the block device you want to use: " -r block_device
+printf "\n"
+if [[ ! -b "${block_device}" ]];then
+    printf "Block device does not exist\nExiting script\n\n"
+    exit 1
+fi
+
+#Partition/Encrypt/Format
+./DiskPrep "${block_device}"
+
+#Install the base system
+./BaseInstall "${block_device}"

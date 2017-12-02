@@ -1,5 +1,7 @@
 #!/bin/bash 
  
+block_device="${1}"
+
  function myEval { 
     #TODO - look into not using eval
     #TODO - pull this out into a shared resource
@@ -19,21 +21,7 @@
     fi
 }
 
-block_device="/dev/sdb"             #TODO make configurable
-
-#TODO Verify the boot mode
-#To verify this, list the efivars directory
-#ls /sys/firmware/efi/efivars
-#If the directory does not exist, the system may be booted in BIOS or CSM mode. 
-
-#Verify root privilege
-if [[ "$EUID" > 0 ]];then 
-    printf "Please run as root\n"
-    exit 1
-fi
-
-#Verify internet connection
-#myEval "wget -q --tries=10 --timeout=20 --spider http://google.com"
+printf "Running DiskPrep using block_device=%s\n" "${block_device}"
 
 #Mount root
 myEval "cryptsetup open ${block_device}2 cryptroot"
@@ -52,7 +40,7 @@ myEval "pacstrap /mnt base base-devel grub sudo wget vim"
 myEval "genfstab -U /mnt >> /mnt/etc/fstab"
 
 myEval "cp ./Chroot /mnt"
-myEval "arch-chroot /mnt ./Chroot /dev/sdb"
+myEval "arch-chroot /mnt ./Chroot ${block_device}"
 myEval "rm /mnt/Chroot"
 
 #Unmount boot
@@ -63,4 +51,4 @@ myEval "rmdir /mnt/boot"
 myEval "umount /mnt"
 myEval "cryptsetup close cryptroot"
 
-#End of script
+printf "BaseInstall finished...\n\n\n"
