@@ -33,7 +33,7 @@ grub-install --target=i386-pc --recheck "$1"
 #Get root partition uuid
 fs_uuid=$(lsblk -no UUID /dev/sdb2)
 printf "UUID for /dev/sdb2 is: %s   \n" "${fs_uuid}"
-sed -i '/GRUB_CMDLINE_LINUX/c\GRUB_CMDLINE_LINUX="cryptdevice=UUID=${fs_uuid}:cryptroot root=/dev/mapper/cryptroot"' /etc/default/grub
+sed -i '/GRUB_CMDLINE_LINUX=/c\GRUB_CMDLINE_LINUX="cryptdevice=UUID=${fs_uuid}:cryptroot root=/dev/mapper/cryptroot"' /etc/default/grub
 myEval "grep GRUB_CMDLINE_LINUX /etc/default/grub"
 myEval "grub-mkconfig -o /boot/grub/grub.cfg"
 
