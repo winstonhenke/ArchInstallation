@@ -27,7 +27,7 @@ SWAP_SIZE=4G
 echo DISK="$1", HOST="$HOST", USERNAME="$USERNAME", HOME_DIR="$HOME_DIR"
 
 # grub as a bootloader
-grub-install --target=i386-pc --recheck "$1"
+grub-install --target=i386-pc --recheck /dev/sdb
 # This makes the grub timeout 0, it's faster than 5 :)
 #sudo sed -i 's/GRUB_TIMEOUT=5/GRUB_TIMEOUT=0/g' /etc/default/grub
 #Get root partition uuid
@@ -57,7 +57,7 @@ echo '%wheel ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
 
 
 #Do Initramfs stuff here
-sed -i 's/^HOOKS.*/HOOKS=(base udev autodetect modconf keyboard block encrypt filesystems keyboard fsck)/' /etc/mkinitcpio.conf
+sed -i 's/^HOOKS.*/HOOKS=(base udev autodetect modconf keyboard block sd-encrypt filesystems keyboard fsck)/' /etc/mkinitcpio.conf
 myEval "grep HOOKS /etc/mkinitcpio.conf"
 myEval "mkinitcpio -p linux"
 
