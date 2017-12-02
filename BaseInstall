@@ -33,7 +33,7 @@ if [[ "$EUID" > 0 ]];then
 fi
 
 #Verify internet connection
-myEval "wget -q --tries=10 --timeout=20 --spider http://google.com"
+#myEval "wget -q --tries=10 --timeout=20 --spider http://google.com"
 
 #Mount root
 myEval "cryptsetup open ${block_device}2 cryptroot"
@@ -46,12 +46,14 @@ myEval "mount ${block_device}1 /mnt/boot"
 #TODO update and verify /etc/pacman.d/mirrorlist
 
 #Install the base packages
-myEval "pacstrap /mnt base base-devel"
+myEval "pacstrap /mnt base base-devel grub sudo wget vim"
 
 #Generate an fstab file
 myEval "genfstab -U /mnt >> /mnt/etc/fstab"
 
-
+myEval "cp ./Chroot /mnt"
+myEval "arch-chroot /mnt ./Chroot /dev/sdb"
+myEval "rm /mnt/Chroot"
 
 #Unmount boot
 myEval "umount /mnt/boot"
