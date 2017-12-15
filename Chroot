@@ -32,7 +32,7 @@ read -p "Enter a username for a new user: " -r new_user
 eval "useradd -m -G wheel -s /bin/bash ${new_user}"
 eval "passwd ${new_user}"
 
-eval "su ${new _user}"
+eval "su ${new_user}"
 
 #Exit the su command
 eval "exit"
