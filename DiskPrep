@@ -2,56 +2,37 @@
 
 block_device="${1}"
 
-function myEval { 
-    #TODO - look into not using eval
-    #TODO - pull this out into a shared resource
-    #https://stackoverflow.com/questions/17529220/why-should-eval-be-avoided-in-bash-and-what-should-i-use-instead 
-    red=`tput setaf 1`
-    green=`tput setaf 2`
-    reset=`tput sgr0`
-
-    printf "Running eval: %s\n" "${1}"
-    eval ${1}
-
-    if [[ $? != 0 ]]; then
-        printf "Command %sfailed%s!!\nExiting script...\n\n" "${red}" "${reset}"
-        exit 1
-    else
-        printf "Command completed %ssuccessfully%s\n\n"   "${green}" "${reset}"
-    fi
-}
-
 printf "Running DiskPrep using block_device=%s\n" "${block_device}"
 
 #Wipe MBR
 printf "Verify the MBR is wiped\n"
-myEval "sudo dd if=/dev/urandom of=${block_device} count=50000 status=progress && sync"
+eval "sudo dd if=/dev/urandom of=${block_device} count=50000 status=progress && sync"
 
 #Create MBR
-myEval "parted --script ${block_device} mklabel msdos"
+eval "parted --script ${block_device} mklabel msdos"
 #Create /boot partition
-myEval "parted --script ${block_device} mkpart primary ext4 1MiB 2GiB set 1 boot on"
+eval "parted --script ${block_device} mkpart primary ext4 1MiB 2GiB set 1 boot on"
 #Create / partition
-myEval "parted --script ${block_device} mkpart primary ext4 2GiB 100%"
+eval "parted --script ${block_device} mkpart primary ext4 2GiB 100%"
 
-myEval "sync"
+eval "sync"
 
 #TODO - look into other options when setting up cryptsetup
 #Create cryptroot
-myEval "cryptsetup -q -v luksFormat ${block_device}2"
-myEval "cryptsetup open ${block_device}2 cryptroot"
+eval "cryptsetup -q -v luksFormat ${block_device}2"
+eval "cryptsetup open ${block_device}2 cryptroot"
 
 #Format /
-myEval "mkfs.ext4 /dev/mapper/cryptroot"
+eval "mkfs.ext4 /dev/mapper/cryptroot"
 
 #Close cryptroot
-myEval "cryptsetup close cryptroot"
+eval "cryptsetup close cryptroot"
 
 #Format /boot 
-myEval "mkfs.ext4 ${block_device}1"
-myEval "mkdir -p /mnt/boot"
-myEval "mount ${block_device}1 /mnt/boot"
-myEval "umount /mnt/boot"
-myEval "rmdir /mnt/boot"
+eval "mkfs.ext4 ${block_device}1"
+eval "mkdir -p /mnt/boot"
+eval "mount ${block_device}1 /mnt/boot"
+eval "umount /mnt/boot"
+eval "rmdir /mnt/boot"
 
 printf "DiskPrep finished...\n\n\n"

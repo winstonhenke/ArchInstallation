@@ -2,27 +2,8 @@
 
 block_device="${1}"
 
- function myEval { 
-    #TODO - look into not using eval
-    #TODO - pull this out into a shared resource
-    #https://stackoverflow.com/questions/17529220/why-should-eval-be-avoided-in-bash-and-what-should-i-use-instead 
-    red=`tput setaf 1`
-    green=`tput setaf 2`
-    reset=`tput sgr0`
-
-    printf "Running eval: %s\n" "${1}"
-    eval ${1}
-
-    if [[ $? != 0 ]]; then
-        printf "Command %sfailed%s!!\nExiting script...\n\n" "${red}" "${reset}"
-        exit 1
-    else
-        printf "Command completed %ssuccessfully%s\n\n"   "${green}" "${reset}"
-    fi
-}
-
 # Install grub as the bootloader
-myEval "grub-install --target=i386-pc --recheck ${block_device}"
+eval "grub-install --target=i386-pc --recheck ${block_device}"
 
 #Get root partition UUID (Do NOT use the UUID of the unlocked luks device)
 block_device_uuid=$(blkid ${block_device}2 | sed -n 's/.* UUID=\"\([^\"]*\)\".*/\1/p')
@@ -31,19 +12,20 @@ block_device_uuid=$(blkid ${block_device}2 | sed -n 's/.* UUID=\"\([^\"]*\)\".*/
 sed -i "/GRUB_CMDLINE_LINUX=/c\\GRUB_CMDLINE_LINUX=\"rd.luks.uuid=${block_device_uuid} rd.luks.name=${block_device_uuid}=cryptroot root=/dev/mapper/cryptroot rd.luks.crypttab=no\"" /etc/default/grub
 
 #Re-generate the grub.cfg file
-myEval "grub-mkconfig -o /boot/grub/grub.cfg"
+eval "grub-mkconfig -o /boot/grub/grub.cfg"
 
-myEval "echo en_US.UTF-8 UTF-8 > /etc/locale.gen"
-myEval "echo LANG=en_US.UTF-8 > /etc/locale.conf"
-myEval "locale-gen"
+eval "echo en_US.UTF-8 UTF-8 > /etc/locale.gen"
+eval "echo LANG=en_US.UTF-8 > /etc/locale.conf"
+eval "locale-gen"
 
 #Specify hooks
 sed -i 's/^HOOKS.*/HOOKS=(base systemd autodetect keyboard modconf block sd-encrypt filesystems fsck)/' /etc/mkinitcpio.conf
+
 #Create a new initramfs
-myEval "mkinitcpio -p linux"
+eval "mkinitcpio -p linux"
 
 printf "Setting password for root... \n"
-myEval "passwd"
+eval "passwd"
 
 printf "BaseInstall finished...\n\n\n"
-myEval "exit"
+eval "exit"
