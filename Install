@@ -1,7 +1,5 @@
 #!/bin/bash
 
-block_device=""                     # The block device to use
-
 #Verify root privilege
 if [[ "$EUID" > 0 ]];then 
     printf "Requires root privileges. Please run under the root user\n"
