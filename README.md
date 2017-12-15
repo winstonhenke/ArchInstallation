@@ -40,12 +40,13 @@ sudo dd if=/dev/urandom of=/dev/sdXY bs=1M status=progress
 First boot the installation media, establish an internet connection, and pull down this git repository
 
 Try wifi-menu as a console interface to netctl which as of this writing is included in the Arch installation media
+
 ```plain text
 wifi-menu
 ```
 
 Command to pull down the repository
+
 ```plain text
 wget https://github.com/winstonhenke/ArchInstallation/tarball/master -O - | tar xz
 ```
-
