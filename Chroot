@@ -22,22 +22,19 @@ eval "locale-gen"
 sed -i 's/^HOOKS.*/HOOKS=(base systemd autodetect keyboard modconf block sd-encrypt filesystems fsck)/' /etc/mkinitcpio.conf
 
 #Create a new initramfs
-eval "mkinitcpio -p linux"
+mkinitcpio -p linux
 
 printf "Setting password for root... \n"
-eval "passwd"
+passwd
 
 #Create a new user
 read -p "Enter a username for a new user: " -r new_user
-eval "useradd -m -G wheel -s /bin/bash ${new_user}"
-eval "passwd ${new_user}"
+useradd -m -G wheel -s /bin/bash "${new_user}"
+passwd "${new_user}"
 
-eval "su ${new_user}"
-
-#Exit the su command
-eval "exit"
+su "${new_user}" -c "cd ~; pwd > ./POC;"
 
 printf "BaseInstall finished...\n\n\n"
 
 #Exit arch-chroot
-eval "exit"
+exit
