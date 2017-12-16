@@ -6,21 +6,21 @@ printf "Running DiskPrep using block_device=%s\n" "${block_device}"
 
 #Wipe MBR
 printf "Verify the MBR is wiped\n"
-sudo dd if=/dev/urandom of=${block_device} count=50000 status=progress && sync
+sudo dd if=/dev/urandom of="${block_device}" count=50000 status=progress && sync
 
 #Create MBR
-parted --script ${block_device} mklabel msdos
+parted --script "${block_device}" mklabel msdos
 #Create /boot partition
-parted --script ${block_device} mkpart primary ext4 1MiB 2GiB set 1 boot on
+parted --script "${block_device}" mkpart primary ext4 1MiB 2GiB set 1 boot on
 #Create / partition
-parted --script ${block_device} mkpart primary ext4 2GiB 100%
+parted --script "${block_device}" mkpart primary ext4 2GiB 100%
 
 sync
 
 #TODO - look into other options when setting up cryptsetup
 #Create cryptroot
-cryptsetup -q -v luksFormat ${block_device}2
-cryptsetup open ${block_device}2 cryptroot
+cryptsetup -q -v luksFormat "${block_device}"2
+cryptsetup open "${block_device}"2 cryptroot
 
 #Format /
 mkfs.ext4 /dev/mapper/cryptroot
@@ -29,9 +29,9 @@ mkfs.ext4 /dev/mapper/cryptroot
 cryptsetup close cryptroot
 
 #Format /boot 
-mkfs.ext4 ${block_device}1
+mkfs.ext4 "${block_device}"1
 mkdir -p /mnt/boot
-mount ${block_device}1 /mnt/boot
+mount "${block_device}"1 /mnt/boot
 umount /mnt/boot
 rmdir /mnt/boot
 

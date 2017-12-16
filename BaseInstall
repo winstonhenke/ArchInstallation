@@ -5,12 +5,12 @@ block_device="${1}"
 printf "Running DiskPrep using block_device=%s\n" "${block_device}"
 
 #Mount root
-cryptsetup open ${block_device}2 cryptroot
+cryptsetup open "${block_device}"2 cryptroot
 mount /dev/mapper/cryptroot /mnt
 
 #Mount boot
 mkdir -p /mnt/boot
-mount ${block_device}1 /mnt/boot
+mount "${block_device}"1 /mnt/boot
 
 #TODO update and verify /etc/pacman.d/mirrorlist
 
@@ -21,7 +21,7 @@ pacstrap /mnt base base-devel grub sudo wget vim
 genfstab -U /mnt >> /mnt/etc/fstab
 
 cp ./Chroot /mnt
-arch-chroot /mnt ./Chroot ${block_device}
+arch-chroot /mnt ./Chroot "${block_device}"
 rm /mnt/Chroot
 
 #Unmount boot
