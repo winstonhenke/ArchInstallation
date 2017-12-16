@@ -3,7 +3,7 @@
 block_device="${1}"
 
 # Install grub as the bootloader
-eval "grub-install --target=i386-pc --recheck ${block_device}"
+grub-install --target=i386-pc --recheck "${block_device}"
 
 #Get root partition UUID (Do NOT use the UUID of the unlocked luks device)
 block_device_uuid=$(blkid ${block_device}2 | sed -n 's/.* UUID=\"\([^\"]*\)\".*/\1/p')
@@ -12,11 +12,11 @@ block_device_uuid=$(blkid ${block_device}2 | sed -n 's/.* UUID=\"\([^\"]*\)\".*/
 sed -i "/GRUB_CMDLINE_LINUX=/c\\GRUB_CMDLINE_LINUX=\"rd.luks.uuid=${block_device_uuid} rd.luks.name=${block_device_uuid}=cryptroot root=/dev/mapper/cryptroot rd.luks.crypttab=no\"" /etc/default/grub
 
 #Re-generate the grub.cfg file
-eval "grub-mkconfig -o /boot/grub/grub.cfg"
+grub-mkconfig -o /boot/grub/grub.cfg
 
-eval "echo en_US.UTF-8 UTF-8 > /etc/locale.gen"
-eval "echo LANG=en_US.UTF-8 > /etc/locale.conf"
-eval "locale-gen"
+echo en_US.UTF-8 UTF-8 > /etc/locale.gen
+echo LANG=en_US.UTF-8 > /etc/locale.conf
+locale-gen
 
 #Specify hooks
 sed -i 's/^HOOKS.*/HOOKS=(base systemd autodetect keyboard modconf block sd-encrypt filesystems fsck)/' /etc/mkinitcpio.conf
