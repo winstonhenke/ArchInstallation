@@ -6,7 +6,7 @@ block_device="${1}"
 grub-install --target=i386-pc --recheck "${block_device}"
 
 #Get root partition UUID (Do NOT use the UUID of the unlocked luks device)
-block_device_uuid=blkid "${block_device}"2 | sed -n 's/.* UUID=\"\([^\"]*\)\".*/\1/p'
+block_device_uuid=$(blkid ${block_device}2 | sed -n 's/.* UUID=\"\([^\"]*\)\".*/\1/p')
 
 #Set kernel parameters for unlocking encrypted root partition
 sed -i "/GRUB_CMDLINE_LINUX=/c\\GRUB_CMDLINE_LINUX=\"rd.luks.uuid=${block_device_uuid} rd.luks.name=${block_device_uuid}=cryptroot root=/dev/mapper/cryptroot rd.luks.crypttab=no\"" /etc/default/grub
