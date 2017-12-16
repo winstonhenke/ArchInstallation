@@ -28,7 +28,8 @@ printf "Setting password for root... \n"
 passwd
 
 #Create a new user
-read -p "Enter a username for a new user: " -r new_user
+read -p "Enter a username for a new ADMIN user: " -r new_user
+
 useradd -m -G wheel -s /bin/bash "${new_user}"
 passwd "${new_user}"
 
