@@ -15,7 +15,7 @@ mount "${block_device}"1 /mnt/boot
 #TODO update and verify /etc/pacman.d/mirrorlist
 
 #Install the base packages
-pacstrap /mnt base base-devel grub sudo wget vim
+pacstrap /mnt base base-devel grub sudo wget vim dialog
 
 #Generate an fstab file
 genfstab -U /mnt >> /mnt/etc/fstab
