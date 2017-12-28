@@ -27,13 +27,21 @@ mkinitcpio -p linux
 printf "Setting password for root... \n"
 passwd
 
+#Give sudo group root privilege
+echo "%sudo ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers.d/default
+visudo -cf /etc/sudoers.d/default
+if [ ! $? -eq 0 ]; then
+    printf "\n\nError setting up local sudoers file\n\n" 
+    exit 1
+fi
+
 #Create a new user
 read -p "Enter a username for a new ADMIN user: " -r new_user
 
-useradd -m -G wheel -s /bin/bash "${new_user}"
+useradd -m -G sudo -s /bin/bash "${new_user}"
 passwd "${new_user}"
 
-su "${new_user}" -c "cd ~; pwd > ./POC;"
+su "${new_user}" -c "cd ~; mkdir ./ExampleDir;" 
 
 printf "BaseInstall finished...\n\n\n"
 
