@@ -42,6 +42,9 @@ read -p "Enter a username for a new ADMIN user: " -r new_user
 useradd -m -G wheel -s /bin/bash "${new_user}"
 passwd "${new_user}"
 
+#Install utils
+pacman -S --noconfirm firefox
+
 #Install sway and it's dependencies
 pacman -S --noconfirm sway dmenu ffmpeg i3status imagemagick rxvt-unicode asciidoc cmake
 #Temp until dot files are under source control
