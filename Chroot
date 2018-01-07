@@ -43,18 +43,7 @@ useradd -m -G wheel -s /bin/bash "${new_user}"
 passwd "${new_user}"
 
 #Install utils
-pacman -S --noconfirm firefox
-
-#Install sway and it's dependencies
-pacman -S --noconfirm sway dmenu ffmpeg i3status imagemagick rxvt-unicode asciidoc cmake
-#Temp until dot files are under source control
-comm1='mkdir -p ~/.config/sway'
-comm2='cp /etc/sway/config ~/.config/sway'
-comm3='echo "#:::::i3_ gaps:::::::::::::: " >> ~/.config/sway/config'
-comm4='echo "gaps inner 10" >> ~/.config/sway/config'
-comm5='echo "gaps outer 5" >> ~/.config/sway/config'
-comm6='echo "smart_gaps on" >> ~/.config/sway/config'
-su "${new_user}" -c "${comm1};${comm2};${comm3};${comm4};${comm5};${comm6}" 
+pacman -S --noconfirm gnome firefox
 
 printf "BaseInstall finished...\n\n\n"
 
