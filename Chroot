@@ -43,10 +43,24 @@ useradd -m -G wheel -s /bin/bash "${new_user}"
 passwd "${new_user}"
 
 #Install utils
-pacman -S --noconfirm gnome firefox
+pacman -S --noconfirm gnome firefox gnome-tweak-tool
 
-systemctl enable gdm.service
+#systemctl enable gdm.service
+#Create a ~/bin directory
+#Add it to $PATH
+#Create a startw script to start GNOME
+    #XDG_SESSION_TYPE=wayland dbus-run-session gnome-session
+
 systemctl enable NetworkManager.service
+
+#TODO AUR Installs
+    #Vscode
+        #git clone https://aur.archlinux.org/visual-studio-code-bin.git
+        #cd visual-studio-code-bin/
+        # makepkg -si --noconfirm 
+
+    #gnome-shell-extension-dash-to-dock
+        #https://aur.archlinux.org/packages/gnome-shell-extension-dash-to-dock/
 
 printf "BaseInstall finished...\n\n\n"
 
