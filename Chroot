@@ -52,10 +52,10 @@ comm1='mkdir ~/bin'
 #Temp until it is pulling all config files from github
 comm2='echo "export PATH=$PATH:$HOME/bin" >> ~/.bashrc'
 comm3='echo "XDG_SESSION_TYPE=wayland dbus-run-session gnome-session" >> ~/bin/startw'
-su "${new_user}" -c "${comm1};${comm2};${comm3}"
+comm4='chmod 700 ~/bin/startw'
+su "${new_user}" -c "${comm1};${comm2};${comm3};${comm4}"
 
-#Probably not needed with Gnome
-#systemctl enable NetworkManager.service
+systemctl enable NetworkManager.service
 
 #TODO AUR Installs
     #Vscode

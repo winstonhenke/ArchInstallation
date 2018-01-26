@@ -3,11 +3,11 @@
 Currently has limited support for
 
 * Simple partition layout with LUKS
-  * No LVM(yet)
+  * No LVM
 * BIOS/MBR only
-  * No UEFI/GPT support(yet)
+  * No UEFI/GPT support
 * One partition schema
-  * boot and root(so far)
+  * boot and root
 
 These tools were designed to automate some of the processes defined in the official [Arch Installation Guide](https://wiki.archlinux.org/index.php/Installation_guide) to allow for a quick full system recovery. This recovery model assumes all media/documents are backed up else where. This model will standup and configure the system. It will not currently restore media/documents from source control or a network drive.
 
