@@ -43,15 +43,17 @@ useradd -m -G wheel -s /bin/bash "${new_user}"
 passwd "${new_user}"
 
 #Install utils
-pacman -S --noconfirm gnome firefox gnome-tweak-tool
+pacman -S --noconfirm gnome gnome-tweak-tool firefox git
 
 #systemctl enable gdm.service
-#Create a ~/bin directory
-#Add it to $PATH
-#Create a startw script to start GNOME
-    #XDG_SESSION_TYPE=wayland dbus-run-session gnome-session
 
-systemctl enable NetworkManager.service
+comm1='mkdir ~/bin'
+#Temp until it is pulling all config files from github
+comm2='echo "export PATH=$PATH:$HOME/bin" >> ~/.bashrc'
+comm3='echo "XDG_SESSION_TYPE=wayland dbus-run-session gnome-session" >> ~/bin/startw'
+
+#Probably not needed with Gnome
+#systemctl enable NetworkManager.service
 
 #TODO AUR Installs
     #Vscode
