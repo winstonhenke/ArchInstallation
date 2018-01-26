@@ -16,8 +16,6 @@ mount "${block_device}"1 /mnt/boot
 
 #Install the base packages
 pacstrap /mnt base base-devel grub sudo wget vim
-#Might not need these using Gnome
-#dialog netctl wpa_supplicant dhcpcd
 
 #Generate an fstab file
 genfstab -U /mnt >> /mnt/etc/fstab
