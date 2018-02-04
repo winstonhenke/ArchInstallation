@@ -60,7 +60,7 @@ systemctl enable NetworkManager.service
 
 #TODO AUR Installs use this? https://aur.archlinux.org/packages/aura/ or https://aur.archlinux.org/packages/trizen/ 
     #Vscode
-        #tmpDir=~/tmp
+        #tmpDir="${HOME}"/tmp
         #mkdir -p "${tmpDir}"
         #cd "${tmpDir}"
         #git clone https://aur.archlinux.org/visual-studio-code-bin.git
