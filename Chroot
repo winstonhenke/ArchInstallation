@@ -44,7 +44,7 @@ useradd -m -G wheel -s /bin/bash "${new_user}"
 passwd "${new_user}"
 
 #Install utils
-pacman -S --noconfirm gnome gnome-tweak-tool firefox git
+pacman -S --noconfirm gnome gnome-tweak-tool firefox chromium git
 
 #systemctl enable gdm.service
 
@@ -57,11 +57,15 @@ su "${new_user}" -c "${comm1};${comm2};${comm3};${comm4}"
 
 systemctl enable NetworkManager.service
 
-#TODO AUR Installs
+
+#TODO AUR Installs use this? https://aur.archlinux.org/packages/aura/ or https://aur.archlinux.org/packages/trizen/ 
     #Vscode
+        #tmpDir=~/tmp
+        #mkdir -p "${tmpDir}"
+        #cd "${tmpDir}"
         #git clone https://aur.archlinux.org/visual-studio-code-bin.git
-        #cd visual-studio-code-bin/
-        # makepkg -si --noconfirm 
+        #cd visual-studio-code-bin
+        #makepkg -si --noconfirm 
 
     #gnome-shell-extension-dash-to-dock
         #https://aur.archlinux.org/packages/gnome-shell-extension-dash-to-dock/
