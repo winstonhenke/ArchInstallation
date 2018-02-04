@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #Verify root privilege
-if [[ "$EUID" > 0 ]];then 
+if [[ "${EUID}" > 0 ]];then 
     printf "Requires root privileges. Please run under the root user\n"
     exit 1
 fi

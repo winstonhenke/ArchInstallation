@@ -46,8 +46,6 @@ passwd "${new_user}"
 #Install utils
 pacman -S --noconfirm gnome gnome-tweak-tool firefox chromium git
 
-#systemctl enable gdm.service
-
 comm1='mkdir ~/bin'
 #Temp until it is pulling all config files from github
 comm2='echo "export PATH=$PATH:$HOME/bin" >> ~/.bashrc'
