@@ -71,6 +71,9 @@ systemctl enable NetworkManager.service
     #chrome-gnome-shell-git
         #https://aur.archlinux.org/chrome-gnome-shell-git.git
 
+#TODO Gnome extensions/themes(not available in the AUR? Had to install these using the browser extension)
+    #https://extensions.gnome.org/extension/744/hide-activities-button/
+
 printf "BaseInstall finished...\n\n\n"
 
 #Exit arch-chroot
