@@ -68,6 +68,9 @@ systemctl enable NetworkManager.service
     #gnome-shell-extension-dash-to-dock
         #https://aur.archlinux.org/packages/gnome-shell-extension-dash-to-dock/
 
+    #chrome-gnome-shell-git
+        #https://aur.archlinux.org/chrome-gnome-shell-git.git
+
 printf "BaseInstall finished...\n\n\n"
 
 #Exit arch-chroot
