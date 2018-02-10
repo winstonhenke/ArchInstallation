@@ -44,7 +44,7 @@ useradd -m -G wheel -s /bin/bash "${new_user}"
 passwd "${new_user}"
 
 #Install utils
-pacman -S --noconfirm gnome gnome-tweak-tool gdm firefox chromium git rxvt-unicode
+pacman -S --noconfirm gnome gnome-tweak-tool gdm firefox chromium git rxvt-unicode keepassxc
 
 comm1='mkdir ~/bin'
 #Temp until it is pulling all config files from github
@@ -57,11 +57,11 @@ systemctl enable NetworkManager.service
 systemctl enable gdm.service
 
 #trizen
-    #tmpDir="${HOME}"/tmp
-    #mkdir -p "${tmpDir}"
-    #cd "${tmpDir}"
-    #git clone https://aur.archlinux.org/trizen.git
-    #makepkg -si --noconfirm
+    # tmpDir="${HOME}"/tmp
+    # mkdir -p "${tmpDir}"
+    # cd "${tmpDir}"
+    # git clone https://aur.archlinux.org/trizen.git
+    # makepkg -si --noconfirm
 
 #Packages to install using trizen ( trizen -S --noedit --noconfirm aur/packageName )
     # https://aur.archlinux.org/packages/visual-studio-code-bin/
@@ -69,9 +69,9 @@ systemctl enable gdm.service
     # https://aur.archlinux.org/packages/chrome-gnome-shell-git/ 
 
 #TODO Gnome extensions/themes(not available in the AUR? Had to install these using the browser extension)
-    #https://extensions.gnome.org/extension/744/hide-activities-button/
-    #https://extensions.gnome.org/extension/750/openweather/
-    #https://extensions.gnome.org/extension/810/hide-app-icon/ 
+    # https://extensions.gnome.org/extension/744/hide-activities-button/
+    # https://extensions.gnome.org/extension/750/openweather/
+    # https://extensions.gnome.org/extension/810/hide-app-icon/ 
 
 printf "BaseInstall finished...\n\n\n"
 
