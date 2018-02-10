@@ -43,8 +43,10 @@ read -p "Enter a username for a new ADMIN user: " -r new_user
 useradd -m -G wheel -s /bin/bash "${new_user}"
 passwd "${new_user}"
 
-#Install utils
-pacman -S --noconfirm gnome gnome-tweak-tool gdm firefox chromium git rxvt-unicode keepassxc
+#pacman installs
+packages0="gnome gnome-tweak-tool gdm"
+packages1="firefox chromium git rxvt-unicode keepassxc vlc handbrake veracrypt filezilla gimp libreoffice-fresh blender"
+pacman -S --noconfirm ${packages0} ${packages1}
 
 comm1='mkdir ~/bin'
 #Temp until it is pulling all config files from github
