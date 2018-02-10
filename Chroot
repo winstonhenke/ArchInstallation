@@ -44,7 +44,7 @@ useradd -m -G wheel -s /bin/bash "${new_user}"
 passwd "${new_user}"
 
 #Install utils
-pacman -S --noconfirm gnome gnome-tweak-tool gdm firefox chromium git
+pacman -S --noconfirm gnome gnome-tweak-tool gdm firefox chromium git rxvt-unicode
 
 comm1='mkdir ~/bin'
 #Temp until it is pulling all config files from github
@@ -68,8 +68,7 @@ systemctl enable gdm.service
     #gnome-shell-extension-dash-to-dock
         #https://aur.archlinux.org/packages/gnome-shell-extension-dash-to-dock/
 
-    #chrome-gnome-shell-git
-    #Is there a better way to install the extensions that are not in the AUR?
+    #chrome-gnome-shell-git     (Is there a better way to install the extensions that are not in the AUR?)
         #https://aur.archlinux.org/chrome-gnome-shell-git.git
 
 #TODO Gnome extensions/themes(not available in the AUR? Had to install these using the browser extension)
