@@ -56,20 +56,17 @@ su "${new_user}" -c "${comm1};${comm2};${comm3};${comm4}"
 systemctl enable NetworkManager.service
 systemctl enable gdm.service
 
-#TODO AUR Installs use this? https://aur.archlinux.org/packages/aura/ or https://aur.archlinux.org/packages/trizen/ 
-    #Vscode
-        #tmpDir="${HOME}"/tmp
-        #mkdir -p "${tmpDir}"
-        #cd "${tmpDir}"
-        #git clone https://aur.archlinux.org/visual-studio-code-bin.git
-        #cd visual-studio-code-bin
-        #makepkg -si --noconfirm 
+#trizen
+    #tmpDir="${HOME}"/tmp
+    #mkdir -p "${tmpDir}"
+    #cd "${tmpDir}"
+    #git clone https://aur.archlinux.org/trizen.git
+    #makepkg -si --noconfirm
 
-    #gnome-shell-extension-dash-to-dock
-        #https://aur.archlinux.org/packages/gnome-shell-extension-dash-to-dock/
-
-    #chrome-gnome-shell-git     (Is there a better way to install the extensions that are not in the AUR?)
-        #https://aur.archlinux.org/chrome-gnome-shell-git.git
+#Packages to install using trizen ( trizen -S --noedit --noconfirm aur/packageName )
+    # https://aur.archlinux.org/packages/visual-studio-code-bin/
+    # https://aur.archlinux.org/packages/gnome-shell-extension-dash-to-dock/
+    # https://aur.archlinux.org/packages/chrome-gnome-shell-git/ 
 
 #TODO Gnome extensions/themes(not available in the AUR? Had to install these using the browser extension)
     #https://extensions.gnome.org/extension/744/hide-activities-button/
