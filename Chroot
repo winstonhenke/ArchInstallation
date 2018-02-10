@@ -46,7 +46,7 @@ passwd "${new_user}"
 #pacman installs
 packages0="gnome gnome-tweak-tool gdm"
 packages1="firefox chromium git rxvt-unicode keepassxc vlc handbrake veracrypt filezilla gimp libreoffice-fresh blender mpv calibre"
-packages2="file-roller p7zip unrar nftables easy-rsa openssh"
+packages2="file-roller p7zip unrar nftables easy-rsa openssh transmission-cli transmission-gtk"
 pacman -S --noconfirm ${packages0} ${packages1} ${packages2}
 
 comm1='mkdir ~/bin'
