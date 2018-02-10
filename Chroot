@@ -44,7 +44,7 @@ useradd -m -G wheel -s /bin/bash "${new_user}"
 passwd "${new_user}"
 
 #Install utils
-pacman -S --noconfirm gnome gnome-tweak-tool firefox chromium git
+pacman -S --noconfirm gnome gnome-tweak-tool gdm firefox chromium git
 
 comm1='mkdir ~/bin'
 #Temp until it is pulling all config files from github
@@ -54,7 +54,7 @@ comm4='chmod 700 ~/bin/startw'
 su "${new_user}" -c "${comm1};${comm2};${comm3};${comm4}"
 
 systemctl enable NetworkManager.service
-
+systemctl enable gdm.service
 
 #TODO AUR Installs use this? https://aur.archlinux.org/packages/aura/ or https://aur.archlinux.org/packages/trizen/ 
     #Vscode
