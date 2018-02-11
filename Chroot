@@ -47,7 +47,8 @@ passwd "${new_user}"
 packages0="gnome gnome-tweak-tool gdm"
 packages1="firefox chromium git rxvt-unicode keepassxc vlc handbrake veracrypt filezilla gimp libreoffice-fresh blender mpv calibre"
 packages2="file-roller p7zip unrar nftables easy-rsa openssh transmission-cli transmission-gtk"
-pacman -S --noconfirm ${packages0} ${packages1} ${packages2}
+packages3="papirus-icon-theme"
+pacman -S --noconfirm ${packages0} ${packages1} ${packages2} ${packages3}
 
 comm1='mkdir ~/bin'
 #Temp until it is pulling all config files from github
@@ -79,7 +80,6 @@ systemctl enable nftables.service
 #TODO Gnome extensions/themes(not available in the AUR? Had to install these using the browser extension)
     # https://extensions.gnome.org/extension/744/hide-activities-button/
     # https://extensions.gnome.org/extension/750/openweather/
-    # https://extensions.gnome.org/extension/810/hide-app-icon/ 
 
 printf "BaseInstall finished...\n\n\n"
 
