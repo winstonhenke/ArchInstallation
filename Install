@@ -1,18 +1,28 @@
 #!/bin/bash
 
+boot_mode=""
+
 #Verify root privilege
 if [[ "${EUID}" > 0 ]];then 
     printf "Requires root privileges. Please run under the root user\n"
     exit 1
 fi
 
-#TODO - Verify BIOS boot mode
+#Check boot mode
+if [[ -d /sys/firmware/efi ]];then
+    boot_mode="UEFI"
+    printf "Currently doesn't handle UEFI firmware.\nYou might be able to skip this check and use Legacy Boot but I never tested that.\n"
+    exit 1
+else
+    #boot_mode isn't used now but when support for UEFI is added it will be
+    boot_mode="BIOS"
+fi
 
 #Determine block device to use
-read -p "Enter the block device you want to use: " -r block_device
+read -p "Enter the block device you want to install to: " -r block_device
 printf "\n"
 if [[ ! -b "${block_device}" ]];then
-    printf "Block device does not exist\nExiting script\n\n"
+    printf "Block device does not exist\n"
     exit 1
 fi
 

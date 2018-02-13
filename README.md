@@ -59,4 +59,4 @@ wget --output-document=- https://github.com/winstonhenke/ArchInstallation/tarbal
 
 Navigate into the the directory created when you pulled down the repo and unpacked it and run the Install command.
 
-It will prompt for things like the disk encryption key, root password(TODO - look to disable this), and a username and password for a new user with root privileges.
+It will prompt for things like the block device you want to install to, the disk encryption key, root password(TODO - look to disable this), and a username and password for a new user with root privileges.
