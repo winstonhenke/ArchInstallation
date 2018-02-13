@@ -4,14 +4,14 @@ Currently has limited support for
 
 * Simple partition layout with LUKS
   * No LVM
-* BIOS/MBR only
-  * No UEFI/GPT support
 * One partition schema
   * boot and root
+* BIOS/MBR only
+  * No UEFI/GPT support
 
-These tools were designed to automate some of the processes defined in the official [Arch Installation Guide](https://wiki.archlinux.org/index.php/Installation_guide) to allow for a quick full system recovery. This recovery model assumes all media/documents are backed up else where. This model will standup and configure the system. It will not currently restore media/documents from source control or a network drive.
+This tool was designed to automate some of the processes defined in the official [Arch Installation Guide](https://wiki.archlinux.org/index.php/Installation_guide) to allow for a quick system install and basic configuration. This recovery model assumes all media/documents are backed up else where and does not handle syncing those items or creating any link to a network drive.
 
-**Do not** blindly follow these instructions and run these scripts or you will have a bad time. Take the time to understand them. I find them helpful for my needs but they may not fit yours.
+**Do not** blindly follow these instructions/run these scripts or you will have a bad time. I find them helpful for my needs but they may not fit yours.
 
 ## High Level Overview
 
@@ -21,32 +21,42 @@ At a high level the following steps should be taken
 * Boot into the Arch installation media
 * Establish an internet connection
 * Pull down repository
-* Run the install scripts
+* Run the install script
 
 ### Wipe Disk
 
-This tool assumes a clean disk and will attempt to wipe any old data away.
+This tool assumes a clean drive but will wipe the first the first few MBs to make sure the MBR is clean.
 
-From any live system wipe the disk being prepped for the new system. This could take a while and may need to run overnight depending on the size of your disk.
+From any live system wipe the hard drive being prepped for the new system. This could take a while and may need to run overnight depending on the size of your disk.
 
 Example
 
 ```plain text
-sudo dd if=/dev/urandom of=/dev/sdXY bs=1M status=progress
+sudo dd if=/dev/urandom of=/dev/sd? bs=64MB status=progress
 ```
 
 ### Boot Arch Installation Media
 
-First boot the installation media, establish an internet connection, and pull down this git repository
+Boot the installation media. Not much else to say.
 
-Try wifi-menu as a console interface to netctl which as of this writing is included in the Arch installation media
+### Establish an Internet Connection
+
+Try wifi-menu as a console interface to netctl which as of this writing is included in the Arch installation media.
 
 ```plain text
 wifi-menu
 ```
 
-Command to pull down the repository
+### Pull Git Repo
+
+Use the following command to pull down this repository. Fun fact, --output-document=- is needed so that documents will be printed to standard output allowing it to be piped into tar.
 
 ```plain text
-wget https://github.com/winstonhenke/ArchInstallation/tarball/master -O - | tar xz
+wget --output-document=- https://github.com/winstonhenke/ArchInstallation/tarball/master | tar xz
 ```
+
+### Run Install Script
+
+Navigate into the the directory created when you pulled down the repo and unpacked it and run the Install command.
+
+It will prompt for things like the disk encryption key, root password(TODO - look to disable this), and a username and password for a new user with root privileges.
