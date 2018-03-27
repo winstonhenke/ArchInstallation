@@ -5,24 +5,27 @@ block_device="${1}"
 printf "Running DiskPrep using block_device=%s\n" "${block_device}"
 
 #Wipe MBR
-printf "Verify the MBR is wiped\n"
+printf "Verifying the MBR is wiped\n"
 sudo dd if=/dev/urandom of="${block_device}" count=50000 status=progress && sync
 
+#Partition the drive
+printf "Creating MBR and boot/root partitions\n"
 #Create MBR
 parted --script "${block_device}" mklabel msdos
 #Create /boot partition
-parted --script "${block_device}" mkpart primary ext4 1MiB 2GiB set 1 boot on
+parted --script "${block_device}" mkpart primary ext4 1MiB 4GiB set 1 boot on
 #Create / partition
-parted --script "${block_device}" mkpart primary ext4 2GiB 100%
+parted --script "${block_device}" mkpart primary ext4 4GiB 100%
 
+#Flush the memory
 sync
 
-#TODO - look into other options when setting up cryptsetup
 #Create cryptroot
-cryptsetup -q -v luksFormat "${block_device}"2
+printf "Running cryptsetup/luksformat on root partition\n"
+cryptsetup --verify-passphrase -batch-mode -verbose --cipher aes-xts-plain64 --key-size 256 --hash sha256 --iter-time 5000 luksFormat "${block_device}"2
 cryptsetup open "${block_device}"2 cryptroot
 
-#Format /
+#Format cryptroot
 mkfs.ext4 /dev/mapper/cryptroot
 
 #Close cryptroot
@@ -30,9 +33,10 @@ cryptsetup close cryptroot
 
 #Format /boot 
 mkfs.ext4 "${block_device}"1
-mkdir -p /mnt/boot
-mount "${block_device}"1 /mnt/boot
-umount /mnt/boot
-rmdir /mnt/boot
+#Delete the following???
+#mkdir -p /mnt/boot
+#mount "${block_device}"1 /mnt/boot
+#umount /mnt/boot
+#rmdir /mnt/boot
 
 printf "DiskPrep finished...\n\n\n"
