@@ -20,6 +20,7 @@ pacstrap /mnt base base-devel grub sudo wget vim
 #Generate an fstab file
 genfstab -U /mnt >> /mnt/etc/fstab
 
+#Copy the Choot script to /mnt
 cp ./Chroot /mnt
 arch-chroot /mnt ./Chroot "${block_device}"
 rm /mnt/Chroot
