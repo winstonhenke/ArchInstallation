@@ -32,6 +32,9 @@ if [[ ! -b "${block_device}" ]];then
     exit 1
 fi
 
+#Activate network time synchronization on installation medium
+timedatectl set-ntp true
+
 #Partition/Encrypt/Format
 ./DiskPrep "${block_device}"
 
