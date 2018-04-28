@@ -30,6 +30,9 @@ else
     echo "LANG=en_US.UTF-8" >> /etc/locale.conf
 fi 
 
+#Set hostname
+read -p "Enter a new hostname: " -r hostname
+echo "${hostname}" > /etc/hostname
 
 #Specify hooks
 sed -i 's/^HOOKS.*/HOOKS=(base systemd autodetect keyboard modconf block sd-encrypt filesystems fsck)/' /etc/mkinitcpio.conf
