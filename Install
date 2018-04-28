@@ -18,6 +18,12 @@ else
     boot_mode="BIOS"
 fi
 
+#Check internet access
+wget -q --tries=10 --timeout=15 --spider http://google.com > /dev/null
+if [[ "${?}" -ne 0 ]];then
+        echo "Offline, first connect to the internet"
+fi
+
 #Determine block device to use
 read -p "Enter the block device you want to install to: " -r block_device
 printf "\n"
