@@ -13,9 +13,9 @@ printf "Creating MBR and boot/root partitions\n"
 #Create MBR
 parted --script "${block_device}" mklabel msdos
 #Create /boot partition
-parted --script "${block_device}" mkpart primary ext4 1MiB 4GiB set 1 boot on
+parted --script "${block_device}" mkpart primary ext4 1MiB 8GiB set 1 boot on
 #Create / partition
-parted --script "${block_device}" mkpart primary ext4 4GiB 100%
+parted --script "${block_device}" mkpart primary ext4 8GiB 100%
 
 #Flush the memory
 sync
