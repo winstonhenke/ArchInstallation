@@ -67,18 +67,18 @@ packages2="file-roller p7zip unrar nftables easy-rsa openssh transmission-cli tr
 packages3="papirus-icon-theme arc-gtk-theme"
 pacman -S --noconfirm ${packages0} ${packages1} ${packages2} ${packages3}
 
-comm1='mkdir ~/bin'
-#Temp until it is pulling all config files from github
-comm2='echo "export PATH=$PATH:$HOME/bin" >> ~/.bashrc'
-comm3='echo "XDG_SESSION_TYPE=wayland dbus-run-session gnome-session" >> ~/bin/startw'
-comm4='chmod 700 ~/bin/startw'
+#Create ~/startw
+#TODO create a repo for ~/Bin stuff and put this in there
+comm1='mkdir ~/Bin'
+comm3='echo "XDG_SESSION_TYPE=wayland dbus-run-session gnome-session" >> ~/Bin/startw'
+comm4='chmod 700 ~/Bin/startw'
 su "${new_user}" -c "${comm1};${comm2};${comm3};${comm4}"
 
 systemctl enable NetworkManager.service
 systemctl enable gdm.service
 systemctl enable nftables.service
 
-#trizen
+#Install Trizen
     # tmpDir="${HOME}"/tmp
     # mkdir -p "${tmpDir}"
     # cd "${tmpDir}"
@@ -100,7 +100,7 @@ systemctl enable nftables.service
 
 #TODO 
     #Swap file - https://wiki.archlinux.org/index.php/Swap#Swap_file 
-    #General - https://wiki.archlinux.org/index.php/General_recommendations 
+    #Sync dotfiles - https://github.com/winstonhenke/Dotfiles 
 
 
 printf "BaseInstall finished...\n\n\n"
