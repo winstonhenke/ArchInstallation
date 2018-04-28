@@ -20,6 +20,7 @@ ln -sf /usr/share/zoneinfo/America/Chicago /etc/localtime
 #Generate /etc/adjtime
 hwclock --systohc
 
+#Setup the locale
 echo en_US.UTF-8 UTF-8 > /etc/locale.gen
 echo LANG=en_US.UTF-8 > /etc/locale.conf
 locale-gen
@@ -55,9 +56,9 @@ printf "Successfully setup local sudoers file\n"
 
 #Create a new user
 read -p "Enter a username for a new ADMIN user: " -r new_user
-
 useradd -m -G wheel -s /bin/bash "${new_user}"
 passwd "${new_user}"
+echo "Finished setting up new ADMIN user"
 
 #pacman installs
 packages0="gnome gnome-tweak-tool gdm"
@@ -99,6 +100,7 @@ systemctl enable nftables.service
 
 #TODO 
     #Swap file - https://wiki.archlinux.org/index.php/Swap#Swap_file 
+    #General - https://wiki.archlinux.org/index.php/General_recommendations 
 
 
 printf "BaseInstall finished...\n\n\n"
