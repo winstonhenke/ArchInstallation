@@ -14,6 +14,12 @@ sed -i "/GRUB_CMDLINE_LINUX=/c\\GRUB_CMDLINE_LINUX=\"rd.luks.uuid=${block_device
 #Re-generate the grub.cfg file
 grub-mkconfig -o /boot/grub/grub.cfg
 
+#Set the time zone
+ln -sf /usr/share/zoneinfo/America/Chicago /etc/localtime
+
+#Generate /etc/adjtime
+hwclock --systohc
+
 echo en_US.UTF-8 UTF-8 > /etc/locale.gen
 echo LANG=en_US.UTF-8 > /etc/locale.conf
 locale-gen
@@ -83,6 +89,7 @@ systemctl enable nftables.service
 
 #TODO 
     #Swap file - https://wiki.archlinux.org/index.php/Swap#Swap_file 
+
 
 printf "BaseInstall finished...\n\n\n"
 
