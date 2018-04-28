@@ -21,7 +21,8 @@ fi
 #Check internet access
 wget -q --tries=10 --timeout=15 --spider http://google.com > /dev/null
 if [[ "${?}" -ne 0 ]];then
-        echo "Offline, first connect to the internet"
+    echo "Offline, first connect to the internet"
+    exit 1
 fi
 
 #Determine block device to use

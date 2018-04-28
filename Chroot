@@ -81,6 +81,9 @@ systemctl enable nftables.service
     # https://extensions.gnome.org/extension/744/hide-activities-button/
     # https://extensions.gnome.org/extension/750/openweather/
 
+#TODO 
+    #Swap file - https://wiki.archlinux.org/index.php/Swap#Swap_file 
+
 printf "BaseInstall finished...\n\n\n"
 
 #Exit arch-chroot
