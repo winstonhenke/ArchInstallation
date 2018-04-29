@@ -95,7 +95,6 @@ systemctl enable nftables.service
 
 #TODO 
     #Swap file - https://wiki.archlinux.org/index.php/Swap#Swap_file 
-    #Sync dotfiles - https://github.com/winstonhenke/Dotfiles 
 
 printf "BaseInstall finished...\n\n\n"
 
