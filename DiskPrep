@@ -22,7 +22,7 @@ sync
 
 #Create cryptroot
 printf "Running cryptsetup/luksformat on root partition\n"
-cryptsetup --verify-passphrase -batch-mode -verbose --cipher aes-xts-plain64 --key-size 256 --hash sha256 --iter-time 5000 luksFormat "${block_device}"2
+cryptsetup --verify-passphrase -verbose --cipher aes-xts-plain64 --key-size 256 --hash sha256 --iter-time 5000 luksFormat "${block_device}"2
 cryptsetup open "${block_device}"2 cryptroot
 
 #Format cryptroot
