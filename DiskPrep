@@ -33,10 +33,5 @@ cryptsetup close cryptroot
 
 #Format /boot 
 mkfs.ext4 "${block_device}"1
-#Delete the following???
-#mkdir -p /mnt/boot
-#mount "${block_device}"1 /mnt/boot
-#umount /mnt/boot
-#rmdir /mnt/boot
 
 printf "DiskPrep finished...\n\n\n"

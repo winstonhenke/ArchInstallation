@@ -88,20 +88,14 @@ systemctl enable nftables.service
 #Packages to install using trizen ( trizen -S --noedit --noconfirm aur/packageName )
     # https://aur.archlinux.org/packages/visual-studio-code-bin/
     # https://aur.archlinux.org/packages/gnome-shell-extension-dash-to-dock/
-    # https://aur.archlinux.org/packages/chrome-gnome-shell-git/ 
     # https://aur.archlinux.org/packages/peek/ 
     # https://aur.archlinux.org/packages/makemkv/ 
     # https://aur.archlinux.org/packages/fiddler/ 
     # https://aur.archlinux.org/packages/postman-bin/ 
 
-#TODO Gnome extensions/themes(not available in the AUR? Had to install these using the browser extension)
-    # https://extensions.gnome.org/extension/744/hide-activities-button/
-    # https://extensions.gnome.org/extension/750/openweather/
-
 #TODO 
     #Swap file - https://wiki.archlinux.org/index.php/Swap#Swap_file 
     #Sync dotfiles - https://github.com/winstonhenke/Dotfiles 
-
 
 printf "BaseInstall finished...\n\n\n"
 
